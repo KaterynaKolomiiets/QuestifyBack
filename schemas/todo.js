@@ -1,16 +1,18 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Joi = require("joi");
-const contactSchema = new Schema(
+const todoSchema = new Schema(
   {
-    name: { type: String, required: [true, "Set name for contact"] },
+    title: { type: String, required: [true, "Set name for ToDo(Quest) card"] },
     // ------------------------------
     // индексация для быстрого поиска
     // name: {type:String, index:1},
     // ------------------------------
-    email: { type: String },
-    phone: { type: String },
-    favorite: { type: Boolean, default: false },
+    category: { type: String, enum: ["STUFF", "FAMILY", "HEALTH", "LEARNING", "LEISURE", "WORK"], default: "STUFF" },
+    type: { type: String, enum: ["TASK", "CHALLENGE"], default: "TASK" },
+    time: { type: Date },
+    isActive: { type: Boolean, default: true }, // active / completed
+    level: { type: String, enum: ["Easy", "Normal", "Hard"], default: "Easy" },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
@@ -19,7 +21,7 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const joiContactsSchema = Joi.object({
+const joiTodoSchema = Joi.object({
   name: Joi.string()
     .regex(/^[a-zA-Zа-яА-Я ]*$/)
     .min(2)
@@ -32,6 +34,6 @@ const joiContactsSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-const Contact = mongoose.model("contacts", contactSchema);
+const Todo = mongoose.model("todos", contactSchema);
 
-module.exports = { Contact, joiContactsSchema };
+module.exports = { Todo, joiTodoSchema };

@@ -10,7 +10,10 @@ try {
     data.connections[0].name &&
       app.listen(PORT, () => {
         const { port, name } = data.connections[0];
-        console.log(`Database connection successfully. DB name is "${name}" on port "${port}".`);
+        console.log(
+          `Database connection successfully. DB name is "${name}" on port "${port}".`
+        );
+        console.log("PORT", PORT);
       });
   });
 } catch (error) {

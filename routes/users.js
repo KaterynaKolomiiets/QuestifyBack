@@ -19,5 +19,6 @@ router.get("/activate/:link", authController.activate);
 router.get("/refresh", authController.refresh);
 router.get("/reset-password", authController.resetPassword);
 router.post("/change-password/:link", authController.changePassword);
+router.get("/confirm-new-host/:link", authController.confirmHost);
 
 module.exports = router;

@@ -5,7 +5,8 @@ class UserController {
   async registration(req, res, next) {
     try {
       const { email, password } = req.body;
-      const userData = await userService.registration(email, password);
+      const host = req.headers.host;
+      const userData = await userService.registration(email, password, host);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -19,7 +20,8 @@ class UserController {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      const userData = await userService.login(email, password);
+      const host = req.headers.host;
+      const userData = await userService.login(email, password, host);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -45,7 +47,7 @@ class UserController {
     try {
       const activationLink = req.params.link;
       await userService.activate(activationLink);
-      return res.redirect(process.env.CLIENT_URL);
+      return res.redirect(process.env.API_URL);
     } catch (e) {
       next(e);
     }
@@ -68,8 +70,8 @@ class UserController {
   async resetPassword(req, res, next) {
     try {
       await userService.resetPasswordRequest(req.body.email);
-      // return res.redirect(process.env.CLIENT_URL);
-      return res.json({ message: "ok" });
+      return res.json({ message: "Please, check your email" });
+      return res.redirect(process.env.API_URL);
     } catch (e) {
       next(e);
     }
@@ -84,6 +86,18 @@ class UserController {
         resetLink
       );
       return res.json({ message: "password change successfully" });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async confirmHost(req, res, next) {
+    try {
+      const result = await userService.confirmNewHost(req.params.link);
+      if (result) {
+        return res.redirect(process.env.API_URL);
+      }
+      res.json({ message: "IP adress mark as safe!" });
     } catch (e) {
       next(e);
     }

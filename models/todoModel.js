@@ -6,7 +6,7 @@ const todoSchema = new Schema(
     title: { type: String, required: [true, "Set name for ToDo(Quest) card"] },
     // ------------------------------
     // индексация для быстрого поиска
-    // name: {type:String, index:1},
+    // name: {type:String, index:1}
     // ------------------------------
     category: { type: String, enum: ["STUFF", "FAMILY", "HEALTH", "LEARNING", "LEISURE", "WORK"], default: "STUFF" },
     type: { type: String, enum: ["TASK", "CHALLENGE"], default: "TASK" },
@@ -15,25 +15,25 @@ const todoSchema = new Schema(
     level: { type: String, enum: ["Easy", "Normal", "Hard"], default: "Easy" },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "users",
     },
   },
   { versionKey: false, timestamps: true }
 );
 
 const joiTodoSchema = Joi.object({
-  name: Joi.string()
+  title: Joi.string()
     .regex(/^[a-zA-Zа-яА-Я ]*$/)
     .min(2)
     .max(30)
     .required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .pattern(/^[+]?[(]?[0-9]{3}[)]?[ ]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/)
-    .required(),
-  favorite: Joi.boolean().required(),
+  category: Joi.string().required(),
+  type: Joi.string().required(),
+  time: Joi.date().required(),
+  isActive: Joi.boolean().required(),
+  level: Joi.string().required(),
 });
 
-const Todo = mongoose.model("todos", contactSchema);
+const Todo = mongoose.model("todos", todoSchema);
 
 module.exports = { Todo, joiTodoSchema };

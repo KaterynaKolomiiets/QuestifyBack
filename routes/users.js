@@ -4,16 +4,8 @@ const authController = require("../controllers/auth/authController");
 const validationMiddelware = require("../middlewares/auth/validationMiddelware");
 const authMiddelware = require("../middlewares/auth/authMiddleware");
 
-router.post(
-  "/registration",
-  validationMiddelware.userValidation,
-  authController.registration
-);
-router.post(
-  "/login",
-  validationMiddelware.userValidation,
-  authController.login
-);
+router.post("/registration", validationMiddelware.userValidation, authController.registration);
+router.post("/login", validationMiddelware.userValidation, authController.login);
 router.post("/logout", authMiddelware, authController.logout);
 router.get("/activate/:link", authController.activate);
 router.get("/refresh", authController.refresh);

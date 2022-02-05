@@ -2,9 +2,18 @@
 
 const { Todo } = require("../models/todoModel");
 
+async function getAll(data) {
+  try {
+    const result = await Todo.find(data); /* .populate("owner") */
+    console.log("Getting All todos...");
+    return result;
+  } catch (error) {
+    console.log("Getting All todos ERROR: ", error);
+  }
+}
 async function getActive(data) {
   try {
-    const result = await Todo.find({ data }); /* .populate("owner") */
+    const result = await Todo.find(data); /* .populate("owner") */
     console.log("Getting Active todos...");
     return result;
   } catch (error) {
@@ -14,7 +23,8 @@ async function getActive(data) {
 
 async function getCompleted(data) {
   try {
-    const result = await Todo.find({ data }); /* .populate("owner") */
+    console.log(data);
+    const result = await Todo.find(data); /* .populate("owner") */
     console.log("Getting Completed todos...");
     return result;
   } catch (error) {
@@ -63,6 +73,7 @@ async function updateStatus(id, owner, isActive) {
 }
 
 module.exports = {
+  getAll,
   getActive,
   getCompleted,
   add,

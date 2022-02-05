@@ -14,6 +14,18 @@ const auth = require("../middlewares/auth/authMiddleware");
 
 */
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *      description: Use to new guest
+ *      responses:
+ *       '200':
+ *         description: ok
+ *
+ *
+ */
+
 router.get("/", function (req, res, next) {
   res.send("Please use /active or  /completed to get respective set of cards.");
 });

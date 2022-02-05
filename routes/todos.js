@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const todosController = require("../controllers/todoController");
-const auth = require("../middlewares/authMiddleware");
+const auth = require("../middlewares/auth/authMiddleware");
 /*
 8. Реализовать энд - поинт создания карточки
 9. Реализовать энд-поинт редактирования карточки

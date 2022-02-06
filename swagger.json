@@ -1,0 +1,1390 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.0",
+    "title": "Questify API docs",
+    "description": "API documentation for GoIT project 'Questify'.",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "https://kapusta-backend.goit.global"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Todos",
+      "description": "Todos endpoints"
+    }
+  ],
+  "paths": {
+    "/auth/registration": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User authentication",
+        "parameters": [],
+        "requestBody": {
+          "description": "Authentication's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "403": {
+            "description": "Email doesn't exist / Password is wrong",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logout",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Get new pair of tokens (use Bearer {refreshToken} instead of accessToken)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Object with session's id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokensRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshTokensResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body / No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid refresh token)",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Google authentication. WARNING: Works only for sign-in, after registered on front-end (if you're writing your back-end for a SPECIFIC front-end, then you can configure it right to work both for sign-up & sign-in)",
+        "responses": {
+          "200": {
+            "description": "Successful operation (redirect to front-end with accessToken, refreshToken and sid in query). Then use GET /user",
+            "content": {}
+          },
+          "403": {
+            "description": "Not registered or registered with postman",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/todos/add": {
+      "post": {
+        "tags": ["Todo card"],
+        "summary": "Add Todo card",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Todo object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IncomeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewIncome"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body) / No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      },
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get income stats",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeStats"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transaction/expense": {
+      "post": {
+        "tags": ["Transaction"],
+        "summary": "Add an expense",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Expense object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpenseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewExpense"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body) / No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      },
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get expense stats",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseStats"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transaction/{transactionId}": {
+      "delete": {
+        "tags": ["Transaction"],
+        "summary": "Delete transaction",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "type": "string",
+            "description": "Transaction's id",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid id) / No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transaction/income-categories": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get categories for incomes",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeCategories"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transaction/expense-categories": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get categories for expenses",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseCategories"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transaction/period-data": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get transactions data for a specific period",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Period dates. YYYY-MM format"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid 'date' format) / No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/balance": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update user's balance",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "New balance object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewBalance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewBalance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body) / No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all your info",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "questify@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty999"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "id": {
+            "type": "string",
+            "description": "User's id",
+            "example": "507f1f77bcf86cd799439011"
+          }
+        }
+      },
+      "LoginRequest": {
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Session's access token (needed for all requests)",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXA"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Session's refresh token (needed for /auth/refresh)",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXB"
+          },
+          "sid": {
+            "type": "string",
+            "description": "Session's id (needed for /auth/refresh)",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "userData": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "balance": {
+                "type": "integer",
+                "description": "User's balance",
+                "example": 5,
+                "minimum": 0
+              },
+              "id": {
+                "type": "string",
+                "description": "User's id",
+                "example": "507f1f77bcf86cd799439012"
+              },
+              "transactions": {
+                "type": "array",
+                "description": "User's transactions",
+                "items": {
+                  "type": "object",
+                  "description": "User's transaction",
+                  "properties": {
+                    "description": {
+                      "type": "string",
+                      "description": "Transaction's description",
+                      "example": "Transaction's description"
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Transaction's category",
+                      "enum": [
+                        "Продукты",
+                        "Алкоголь",
+                        "Развлечения",
+                        "Здоровье",
+                        "Транспорт",
+                        "Всё для дома",
+                        "Техника",
+                        "Коммуналка и связь",
+                        "Спорт и хобби",
+                        "Образование",
+                        "Прочее",
+                        "Доход"
+                      ]
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "description": "Transaction's amount"
+                    },
+                    "date": {
+                      "type": "string",
+                      "description": "Transaction's date",
+                      "example": "2020-12-31"
+                    },
+                    "_id": {
+                      "type": "string",
+                      "description": "Transaction's id",
+                      "example": "507f1f77bcf86cd799439013"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "RefreshTokensRequest": {
+        "type": "object",
+        "properties": {
+          "sid": {
+            "type": "string",
+            "description": "Session's ('sid' field after authentication)",
+            "example": "507f1f77bcf86cd799439011"
+          }
+        }
+      },
+      "RefreshTokensResponse": {
+        "type": "object",
+        "properties": {
+          "newAccessToken": {
+            "type": "string",
+            "description": "Access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXA"
+          },
+          "newRefreshToken": {
+            "type": "string",
+            "description": "Refresh token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXB"
+          },
+          "newSid": {
+            "type": "string",
+            "description": "New session's id",
+            "example": "507f1f77bcf86cd799439011"
+          }
+        }
+      },
+      "TodoRequest": {
+        "type": "object",
+        "required": ["title", "category", "type", "time", "isActive", "level"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "length": "30 letters max.",
+            "description": "Name of Todo card",
+            "example": "Fly to Bali"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of Todo card",
+            "enum": ["STUFF", "FAMILY", "HEALTH", "LEARNING", "LEISURE", "WORK"],
+            "example": "STUFF"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of Todo card",
+            "enum": ["TASK", "CHALLENGE"],
+            "example": "TASK"
+          },
+          "time": {
+            "type": "string",
+            "description": "Start date of Todo event",
+            "example": "04/11/2022"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Status of Todo card (active or completed already)",
+            "example": "true"
+          },
+          "level": {
+            "type": "string",
+            "description": "Difficulty of Todo event",
+            "enum": ["Easy", "Normal", "Hard"],
+            "example": "Easy"
+          }
+        }
+      },
+      "NewIncome": {
+        "type": "object",
+        "properties": {
+          "newBalance": {
+            "type": "integer",
+            "description": "User's new balance",
+            "example": 100
+          },
+          "transaction": {
+            "type": "object",
+            "description": "New transaction info",
+            "properties": {
+              "description": {
+                "type": "string",
+                "description": "Income description",
+                "example": "Income description"
+              },
+              "amount": {
+                "type": "integer",
+                "description": "Income amount",
+                "minimum": 1,
+                "example": 100
+              },
+              "date": {
+                "type": "string",
+                "description": "Income date",
+                "example": "2020-12-31"
+              },
+              "category": {
+                "type": "string",
+                "description": "Income category (always 'Доход')",
+                "example": "Доход"
+              },
+              "_id": {
+                "type": "string",
+                "description": "Income id",
+                "example": "507f1f77bcf86cd799439011"
+              }
+            }
+          }
+        }
+      },
+      "ExpenseRequest": {
+        "type": "object",
+        "required": ["description", "amount", "date", "category"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Expense description",
+            "example": "Expense description"
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Expense amount",
+            "minimum": 1,
+            "example": 100
+          },
+          "date": {
+            "type": "string",
+            "description": "Expense date",
+            "example": "2020-12-31"
+          },
+          "category": {
+            "type": "string",
+            "description": "Expense date",
+            "example": "Продукты",
+            "enum": [
+              "Продукты",
+              "Алкоголь",
+              "Развлечения",
+              "Здоровье",
+              "Транспорт",
+              "Всё для дома",
+              "Техника",
+              "Коммуналка и связь",
+              "Спорт и хобби",
+              "Образование",
+              "Прочее",
+              "Доход"
+            ]
+          }
+        }
+      },
+      "NewExpense": {
+        "type": "object",
+        "properties": {
+          "newBalance": {
+            "type": "integer",
+            "description": "User's new balance",
+            "example": -100
+          },
+          "transaction": {
+            "type": "object",
+            "description": "New transaction info",
+            "properties": {
+              "description": {
+                "type": "string",
+                "description": "Expense description",
+                "example": "Expense description"
+              },
+              "amount": {
+                "type": "integer",
+                "description": "Expense amount",
+                "minimum": 1,
+                "example": 100
+              },
+              "date": {
+                "type": "string",
+                "description": "Income date",
+                "example": "2020-12-31"
+              },
+              "category": {
+                "type": "string",
+                "description": "Expense category",
+                "enum": [
+                  "Продукты",
+                  "Алкоголь",
+                  "Развлечения",
+                  "Здоровье",
+                  "Транспорт",
+                  "Всё для дома",
+                  "Техника",
+                  "Коммуналка и связь",
+                  "Спорт и хобби",
+                  "Образование",
+                  "Прочее",
+                  "Доход"
+                ],
+                "example": "Продукты"
+              },
+              "_id": {
+                "type": "string",
+                "description": "Expense id",
+                "example": "507f1f77bcf86cd799439011"
+              }
+            }
+          }
+        }
+      },
+      "DeleteResponse": {
+        "type": "object",
+        "properties": {
+          "newBalance": {
+            "type": "integer",
+            "description": "User's new balance"
+          }
+        }
+      },
+      "IncomeStats": {
+        "type": "object",
+        "properties": {
+          "incomes": {
+            "type": "array",
+            "description": "Array of user incomes",
+            "items": {
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Income description",
+                  "example": "Income description"
+                },
+                "amount": {
+                  "type": "integer",
+                  "description": "Income amount",
+                  "minimum": 1,
+                  "example": 100
+                },
+                "date": {
+                  "type": "string",
+                  "description": "Income date",
+                  "example": "2020-12-31"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Income category (always 'Доход')",
+                  "example": "Доход"
+                },
+                "_id": {
+                  "type": "string",
+                  "description": "Income id",
+                  "example": "507f1f77bcf86cd799439011"
+                }
+              }
+            }
+          },
+          "monthStats": {
+            "type": "object",
+            "description": "User's income total amount stats in every month",
+            "properties": {
+              "Январь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 5
+              },
+              "Февраль": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 100
+              },
+              "Март": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Апрель": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Май": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 1
+              },
+              "Июнь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Июль": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 3
+              },
+              "Август": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Сентябрь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Октябрь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 77
+              },
+              "Ноябрь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Декабрь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 123
+              }
+            }
+          }
+        }
+      },
+      "ExpenseStats": {
+        "type": "object",
+        "properties": {
+          "incomes": {
+            "type": "array",
+            "description": "Array of user expenses",
+            "items": {
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Expense description",
+                  "example": "Expense description"
+                },
+                "amount": {
+                  "type": "integer",
+                  "description": "Expense amount",
+                  "minimum": 1,
+                  "example": 100
+                },
+                "date": {
+                  "type": "string",
+                  "description": "Expense date",
+                  "example": "2020-12-31"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Expense category",
+                  "enum": [
+                    "Продукты",
+                    "Алкоголь",
+                    "Развлечения",
+                    "Здоровье",
+                    "Транспорт",
+                    "Всё для дома",
+                    "Техника",
+                    "Коммуналка и связь",
+                    "Спорт и хобби",
+                    "Образование",
+                    "Прочее",
+                    "Доход"
+                  ],
+                  "example": "Продукты"
+                },
+                "_id": {
+                  "type": "string",
+                  "description": "Income id",
+                  "example": "507f1f77bcf86cd799439011"
+                }
+              }
+            }
+          },
+          "monthStats": {
+            "type": "object",
+            "description": "User's expense total amount stats in every month",
+            "properties": {
+              "Январь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 5
+              },
+              "Февраль": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 100
+              },
+              "Март": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Апрель": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Май": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 1
+              },
+              "Июнь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Июль": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 3
+              },
+              "Август": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Сентябрь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Октябрь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 77
+              },
+              "Ноябрь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": "N/A"
+              },
+              "Декабрь": {
+                "type": {
+                  "oneOf": ["string", "number"]
+                },
+                "description": "August stats",
+                "example": 123
+              }
+            }
+          }
+        }
+      },
+      "IncomeCategories": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Income category"
+        },
+        "example": ["З/П", "Доп. доход"]
+      },
+      "ExpenseCategories": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Expense category"
+        },
+        "example": [
+          "Продукты",
+          "Алкоголь",
+          "Развлечения",
+          "Здоровье",
+          "Транспорт",
+          "Всё для дома",
+          "Техника",
+          "Коммуналка и связь",
+          "Спорт и хобби",
+          "Образование",
+          "Прочее"
+        ]
+      },
+      "NewBalance": {
+        "required": ["newBalance"],
+        "type": "object",
+        "properties": {
+          "newBalance": {
+            "type": "integer",
+            "description": "New balance",
+            "example": 1,
+            "minimum": 1
+          }
+        }
+      },
+      "TransactionData": {
+        "type": "object",
+        "properties": {
+          "incomes": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "description": "Total amount from incomes for this period",
+                "example": 12000
+              },
+              "incomesData": {
+                "type": "object",
+                "example": {
+                  "З/П": {
+                    "total": 12000,
+                    "Аванс": 5000,
+                    "Основная": 7000
+                  }
+                }
+              }
+            }
+          },
+          "expenses": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "description": "Total amount from expenses for this period",
+                "example": 5200
+              },
+              "incomesData": {
+                "type": "object",
+                "example": {
+                  "Транспорт": {
+                    "total": 4000,
+                    "СТО": 3500,
+                    "Мойка": 500
+                  },
+                  "Всё для дома": {
+                    "total": 1200,
+                    "Вазон": 150,
+                    "Шкаф-купе": 1050
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetUserInfo": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "test@email.com"
+          },
+          "balance": {
+            "type": "integer",
+            "description": "User's balance",
+            "example": 0
+          },
+          "transactions": {
+            "type": "array",
+            "description": "User's transactions",
+            "items": {
+              "type": "object",
+              "description": "User's transaction",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Transaction's description",
+                  "example": "Transaction's description"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Transaction's category",
+                  "enum": [
+                    "Продукты",
+                    "Алкоголь",
+                    "Развлечения",
+                    "Здоровье",
+                    "Транспорт",
+                    "Всё для дома",
+                    "Техника",
+                    "Коммуналка и связь",
+                    "Спорт и хобби",
+                    "Образование",
+                    "Прочее",
+                    "Доход"
+                  ]
+                },
+                "amount": {
+                  "type": "integer",
+                  "description": "Transaction's amount"
+                },
+                "date": {
+                  "type": "string",
+                  "description": "Transaction's date",
+                  "example": "2020-12-31"
+                },
+                "_id": {
+                  "type": "string",
+                  "description": "Transaction's id",
+                  "example": "507f1f77bcf86cd799439013"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -39,7 +39,7 @@ async function addTodo(req, res) {
     }
     const result = await services.add({ ...newTodo, owner: req.user.id });
 
-    return res.status(201).json({ status: 201, message: "Created Successfully", result });
+    return res.status(201).json({ result });
   } catch (error) {
     console.log("Add new todo error: ", error);
   }

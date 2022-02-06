@@ -18,7 +18,7 @@ class UserService {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
-      throw ApiError.BadRequest(`Email ${email} in use!`);
+      throw ApiError.Conflict(`Email ${email} in use!`);
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
@@ -44,11 +44,16 @@ class UserService {
 
     await sgMail.send(msg);
 
-    const userDto = new UserDto(user); // id, email, isActivated
-    const tokens = tokenService.generateTokens({ ...userDto });
-    await tokenService.saveToken(userDto.id, tokens.refreshToken);
+    // const userDto = new UserDto(user); // id, email, isActivated
+    // const tokens = tokenService.generateTokens({ ...userDto });
+    // await tokenService.saveToken(userDto.id, tokens.refreshToken);
+    const newUser = await UserModel.findOne({ email });
 
-    return { ...tokens, user: userDto };
+    return {
+      email: newUser.email,
+      id: newUser.id,
+      isActivated: user.isActivated,
+    };
   }
 
   async activate(activationLink) {
@@ -64,11 +69,15 @@ class UserService {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const user = await UserModel.findOne({ email });
     if (!user) {
-      throw ApiError.BadRequest(`User with email ${email} not found!`);
+      throw ApiError.Forbidden(`User with email ${email} not found!`);
     }
     const isPassEquals = await bcrypt.compare(password, user.password);
     if (!isPassEquals) {
-      throw ApiError.BadRequest("Wrong password!");
+      throw ApiError.Forbidden("Wrong password!");
+    }
+
+    if (!user.isActivated) {
+      throw ApiError.Forbidden("Not activated account!");
     }
 
     if (user.host.length && !user.host.includes(host)) {

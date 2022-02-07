@@ -112,6 +112,7 @@ class UserService {
 
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
+    console.log("tokens", tokens);
 
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
@@ -131,7 +132,7 @@ class UserService {
     if (!userData || !tokenFromDb) {
       throw ApiError.UnauthorizedError();
     }
-    const user = await UserModel.findById(userData.id);
+    const user = await UserModel.findOne({ email: userData.email });
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
 

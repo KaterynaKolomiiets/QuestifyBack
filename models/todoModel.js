@@ -30,7 +30,7 @@ const joiTodoSchema = Joi.object({
   category: Joi.string().required(),
   type: Joi.string().required(),
   time: Joi.date().required(),
-  isActive: Joi.boolean().required(),
+  isActive: Joi.boolean(),
   level: Joi.string().required(),
 });
 

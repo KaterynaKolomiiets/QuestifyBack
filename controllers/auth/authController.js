@@ -5,7 +5,9 @@ class UserController {
   async registration(req, res, next) {
     try {
       const { email, password } = req.body;
-      const host = req.socket.remoteaddress;
+
+      const host =
+        req.headers["x-forwarded-for"] || req.connection.remoteAddress;
       const userData = await userService.registration(email, password, host);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -20,7 +22,8 @@ class UserController {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      const host = req.ip;
+      const host =
+        req.headers["x-forwarded-for"] || req.connection.remoteAddress;
       const userData = await userService.login(email, password, host);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,

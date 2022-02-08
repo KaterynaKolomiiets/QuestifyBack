@@ -23,73 +23,55 @@ function getCompletedTodos(req, res) {
 }
 
 async function addTodo(req, res) {
-  //  console.log("USER- ", req.user);
-  try {
-    const newTodo = {
-      title: req.body.title,
-      category: req.body.category,
-      type: req.body.type,
-      time: req.body.time,
-      isActive: req.body.isActive ? "true" : "false",
-      level: req.body.level,
-    };
-    const { error } = joiTodoSchema.validate(newTodo);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
-    const result = await services.add({ ...newTodo, owner: req.user.id });
-
-    return res.status(201).json({ status: 201, message: "Created Successfully", result });
-  } catch (error) {
-    console.log("Add new todo error: ", error);
+  const newTodo = {
+    title: req.body.title,
+    category: req.body.category,
+    type: req.body.type,
+    time: req.body.time,
+    //       isActive: req.body.isActive ? "true" : "false",
+    level: req.body.level,
+  };
+  const { error } = joiTodoSchema.validate(newTodo);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
   }
+  const result = await services.add({ ...newTodo, owner: req.user.id });
+
+  return res.status(201).json({ result });
 }
 
 async function updateTodo(req, res) {
-  try {
-    const { id: owner } = req.user;
-    const id = req.params.todoId;
-    const todo = {
-      title: req.body.title,
-      category: req.body.category,
-      type: req.body.type,
-      time: req.body.time,
-      isActive: req.body.isActive ? true : false,
-      level: req.body.level,
-    };
-    const { error } = joiTodoSchema.validate(todo);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
-
-    const result = await services.update(id, owner, { ...todo, owner });
-
-    return result
-      ? res.status(201).json({ status: 201, message: "Updated Successfully", result })
-      : res.status(404).json({ message: `Todo with id:${id} not found` });
-  } catch (error) {
-    console.log("Update Todo error: ", error);
+  const { id: owner } = req.user;
+  const id = req.params.todoId;
+  const todo = {
+    title: req.body.title,
+    category: req.body.category,
+    type: req.body.type,
+    time: req.body.time,
+    isActive: req.body.isActive ? true : false,
+    level: req.body.level,
+  };
+  const { error } = joiTodoSchema.validate(todo);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
   }
+
+  const result = await services.update(id, owner, { ...todo, owner });
+
+  return result ? res.status(201).json({ result }) : res.status(404).json({ message: `Todo with id:${id} not found` });
 }
 
 async function setStatusTodo(req, res) {
-  try {
-    const { id: owner } = req.user;
-    const id = req.params.todoId;
-    const isActive = {
-      isActive: req.body.isActive,
-    };
-    if (typeof isActive.isActive !== "boolean") {
-      return res.status(400).json({ message: "Missing field isActive" });
-    }
-    const result = await services.updateStatus(id, owner, isActive);
-    return result
-      ? res.status(201).json({ status: 201, message: "Status Updated Successfully", result })
-      : res.status(404).json({ message: `Todo with id:${id} not found` });
-  } catch (error) {
-    console.log("Update status error: ", error);
-    return res.status(404).json({ message: "Not found" });
+  const { id: owner } = req.user;
+  const id = req.params.todoId;
+  const isActive = {
+    isActive: req.body.isActive,
+  };
+  if (typeof isActive.isActive !== "boolean") {
+    return res.status(400).json({ message: "Missing field isActive" });
   }
+  const result = await services.updateStatus(id, owner, isActive);
+  return result ? res.status(201).json({ result }) : res.status(404).json({ message: `Todo with id:${id} not found` });
 }
 
 async function removeTodo(req, res) {

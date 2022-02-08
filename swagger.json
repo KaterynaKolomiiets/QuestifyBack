@@ -1,0 +1,616 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.0",
+    "title": "Questify API docs",
+    "description": "API documentation for GoIT project 'Questify'.",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [{"url": "http://questify-project.herokuapp.com"}],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Todos",
+      "description": "Todos endpoints"
+    }
+  ],
+  "paths": {
+    "/api/users/registration": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Email in use!",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User authentication",
+        "parameters": [],
+        "requestBody": {
+          "description": "Authentication's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "403": {
+            "description": "User with email not found! / Wrong password!/ Not activared account!",
+            "content": {}
+          }
+        }
+      }
+    },
+
+
+    "/api/users/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User authentication",
+        "parameters": [],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnauthorizedError",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logout",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/users/change-password/:link": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Change password",
+        "parameters": [],
+        "requestBody": {
+          "description": "Data object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/todos/add": {
+    "post": {
+      "tags": ["Todo card"],
+      "summary": "Add Todo card",
+      "security": [
+        {
+          "Bearer": []
+        }
+      ],
+      "parameters": [],
+      "requestBody": {
+        "description": "Todo object",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TodoRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Successful operation",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoRequest"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request (invalid request body)",
+          "content": {}
+        }
+      }
+    }
+  }, 
+   "/api/todos/update/:todoId": {
+    "put": {
+      "tags": ["Todo card"],
+      "summary": "Update Todo card",
+      "security": [
+        {
+          "Bearer": []
+        }
+      ],
+      "parameters": [],
+      "requestBody": {
+        "description": "Todo object",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TodoRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoRequest"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request (invalid request body)",
+          "content": {}
+        }
+      }
+    }
+  },
+    "/api/todos/status/:todoId": {
+    "patch": {
+      "tags": ["Todo card"],
+      "summary": "Status update of Todo card by ID",
+      "security": [
+        {
+          "Bearer": []
+        }
+      ],
+      "parameters": [],
+      "requestBody": {
+        "description": "Todo object - status field only - true or false but not in a brackets!",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/StatusRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoRequest"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request (invalid request body)",
+          "content": {}
+        }
+      }
+    }
+  },
+    "/api/todos/remove/:todoId": {
+    "delete": {
+      "tags": ["Todo card"],
+      "summary": "Delete of Todo card by ID",
+      "security": [
+        {
+          "Bearer": []
+        }
+      ],
+      "parameters": [],
+      "requestBody": {
+        "description": "Body is not needed",
+        "required": false
+      },
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+          "content": {}
+        },
+        "400": {
+          "description": "Bad request",
+          "content": {}
+        }
+      }
+    }
+  },
+    "/api/todos/all": {
+    "get": {
+      "tags": ["Todo card"],
+      "summary": "Get All todos",
+      "security": [
+        {
+          "Bearer": []
+        }
+      ],
+      "parameters": [],
+      "requestBody": {
+        "description": "Body is not needed",
+        "required": false
+      },
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+           "content": {
+            "application/json": {
+                "schema": {
+                "$ref": "#/components/schemas/GetAllTodosResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "content": {}
+        }
+      }
+    }
+  },
+    "/api/todos/active": {
+    "get": {
+      "tags": ["Todo card"],
+      "summary": "Get just Active todos",
+      "security": [
+        {
+          "Bearer": []
+        }
+      ],
+      "parameters": [],
+      "requestBody": {
+        "description": "Body is not needed",
+        "required": false
+      },
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+           "content": {
+            "application/json": {
+                "schema": {
+                "$ref": "#/components/schemas/GetTodosResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "content": {}
+        }
+      }
+    }
+  },
+    "/api/todos/completed": {
+    "get": {
+      "tags": ["Todo card"],
+      "summary": "Get just completed todos",
+      "security": [
+        {
+          "Bearer": []
+        }
+      ],
+      "parameters": [],
+      "requestBody": {
+        "description": "Body is not needed",
+        "required": false
+      },
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+           "content": {
+            "application/json": {
+                "schema": {
+                "$ref": "#/components/schemas/GetTodosResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "content": {}
+        }
+      }
+    } 
+    
+  }
+    
+    
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "questify@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty999"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "id": {
+            "type": "string",
+            "description": "User's id",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "isActivated": {
+            "type": "boolean",
+            "description": "Is account activated flag",
+            "example": "true/false"
+          }
+          
+        }
+      },
+      "LoginRequest": {
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Accsess token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXA"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXB"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "id": {
+          "type": "string",
+          "description": "User's id",
+          "example": "507f1f77bcf86cd799439012"
+          }
+            
+        }
+      },
+
+      "RefreshResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Accsess token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXA"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXB"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "id": {
+          "type": "string",
+          "description": "User's id",
+          "example": "507f1f77bcf86cd799439012"
+          }
+            
+        }
+      },
+
+      "ChangePassword": {
+        "type": "object",
+        "required": ["password"],
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty999"
+          }
+        }
+      },
+
+      "TodoRequest": {
+        "type": "object",
+        "required": ["title", "category", "type", "time", "isActive", "level"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "length": "30 letters max.",
+            "description": "Name of Todo card",
+            "example": "Fly to Bali"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of Todo card",
+            "enum": ["STUFF", "FAMILY", "HEALTH", "LEARNING", "LEISURE", "WORK"],
+            "example": "STUFF"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of Todo card",
+            "enum": ["TASK", "CHALLENGE"],
+            "example": "TASK"
+          },
+          "time": {
+            "type": "string",
+            "description": "Start date of Todo event",
+            "example": "04/11/2022"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Status of Todo card (active or completed already)",
+            "example": "true"
+          },
+          "level": {
+            "type": "string",
+            "description": "Difficulty of Todo event",
+            "enum": ["Easy", "Normal", "Hard"],
+            "example": "Easy"
+          }
+        }
+      },
+        "StatusRequest": {
+        "type": "object",
+        "required": ["isActive"],
+        "properties": {
+          "isActive": {
+            "type": "boolean",
+            "description": "Status of Todo card (active or completed already)",
+            "example": "true"
+          }
+        }
+      },
+        "GetTodosResponse": {
+        "type": "array",
+        "items":{"$ref": "#/components/schemas/TodoRequest"},
+        "example": "[{todo1}, {todo2}, ...]"
+      }
+
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

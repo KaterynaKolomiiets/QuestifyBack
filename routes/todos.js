@@ -14,16 +14,21 @@ const auth = require("../middlewares/auth/authMiddleware");
 
 */
 
-router.get("/", function (req, res, next) {
-  res.send("Please use /active or  /completed to get respective set of cards.");
-});
-//+ router.get("/active", todosController.getActiveTodos);
-//+ router.get("/completed", todosController.getCompletedTodos);
+/**
+ * @swagger
+ * /:
+ *   get:
+ *      description: Use to new guest
+ *      responses:
+ *       '200':
+ *         description: ok
+ *
+ *
+ */
 
-//+ router.post("/add", todosController.addTodo);
-//+ router.put("/update/:todoId", todosController.updateTodo);
-//+ router.patch("/status/:todoId", todosController.setStatusTodo);
-//+ router.delete("/remove/:todoId", todosController.removeTodo);
+router.get("/", function (req, res, next) {
+  res.send("Please use /active or  /completed or /all to get respective set of cards.");
+});
 
 router.get("/all", auth, todosController.getAllTodos);
 router.get("/active", auth, todosController.getActiveTodos);

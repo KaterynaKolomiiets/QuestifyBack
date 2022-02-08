@@ -5,13 +5,15 @@ class UserController {
   async registration(req, res, next) {
     try {
       const { email, password } = req.body;
-      const host = req.headers.host;
+
+      const host =
+        req.headers["x-forwarded-for"] || req.connection.remoteAddress;
       const userData = await userService.registration(email, password, host);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
-      return res.json(userData);
+      return res.status(201).json(userData);
     } catch (e) {
       next(e);
     }
@@ -20,7 +22,8 @@ class UserController {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      const host = req.headers.host;
+      const host =
+        req.headers["x-forwarded-for"] || req.connection.remoteAddress;
       const userData = await userService.login(email, password, host);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -37,7 +40,7 @@ class UserController {
       const { refreshToken } = req.cookies;
       const token = await userService.logout(refreshToken);
       res.clearCookie("refreshToken");
-      return res.json({ message: "logout success" });
+      return res.status(200).json({ message: "logout success" });
     } catch (e) {
       next(e);
     }

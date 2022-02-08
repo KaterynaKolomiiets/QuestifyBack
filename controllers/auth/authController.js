@@ -5,6 +5,7 @@ class UserController {
   async registration(req, res, next) {
     try {
       const { email, password } = req.body;
+
       const host =
         req.headers["x-forwarded-for"] || req.connection.remoteAddress;
       const userData = await userService.registration(email, password, host);

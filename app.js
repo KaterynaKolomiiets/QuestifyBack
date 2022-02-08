@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   cors({
     credentials: true,
-    origin: process.env.API_URL,
+    origin: [process.env.API_URL, "http://localhost:3000"],
   })
 );
 

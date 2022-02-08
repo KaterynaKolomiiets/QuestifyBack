@@ -124,6 +124,7 @@ class UserService {
   }
 
   async refresh(refreshToken) {
+    console.log("refreshToken", refreshToken);
     if (!refreshToken) {
       throw ApiError.UnauthorizedError();
     }
@@ -163,6 +164,7 @@ class UserService {
     };
 
     await sgMail.send(msg);
+    return resetLink;
   }
 
   async changePassword(password, resetLink) {

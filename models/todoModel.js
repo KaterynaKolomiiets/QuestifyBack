@@ -23,7 +23,7 @@ const todoSchema = new Schema(
 
 const joiTodoSchema = Joi.object({
   title: Joi.string()
-    .regex(/^[a-zA-Zа-яА-Я ]*$/)
+    .regex(/^[a-zA-Zа-яА-Яіїє' ]*$/)
     .min(2)
     .max(30)
     .required(),

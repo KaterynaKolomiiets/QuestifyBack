@@ -57,6 +57,7 @@ class UserController {
   }
 
   async refresh(req, res, next) {
+    console.log("req", req.headers);
     try {
       const { refreshToken } = req.cookies;
       const userData = await userService.refresh(refreshToken);
@@ -71,10 +72,13 @@ class UserController {
   }
 
   async resetPassword(req, res, next) {
+    console.log("req.body", req.body);
     try {
-      await userService.resetPasswordRequest(req.body.email);
-      return res.json({ message: "Please, check your email" });
-      return res.redirect(process.env.API_URL);
+      const link = await userService.resetPasswordRequest(req.body.email);
+      // return res.json({ message: "Please, check your email" });
+      return res.redirect(
+        `${process.env.API_URL}/api/users/change-password/${link}`
+      );
     } catch (e) {
       next(e);
     }
@@ -82,6 +86,7 @@ class UserController {
 
   async changePassword(req, res, next) {
     try {
+      console.log("req", req);
       const resetLink = req.params.link;
       console.log("resetLink", resetLink);
       const newPassword = await userService.changePassword(

@@ -39,6 +39,7 @@ app.use(
       "X-Requested-With",
       "Authorization",
       "Set-Cookie",
+      "header1",
     ],
   })
 );

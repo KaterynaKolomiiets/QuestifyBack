@@ -18,7 +18,7 @@ router.post("/logout", authMiddelware, authController.logout);
 router.get("/activate/:link", authController.activate);
 router.get("/refresh", authController.refresh);
 router.post("/reset-password", authController.resetPassword);
-router.post("/change-password/:link", authController.changePassword);
+router.post("/change-password/:link", authController.changePasswordController);
 router.get("/confirm-new-host/:link", authController.confirmHost);
 
 module.exports = router;

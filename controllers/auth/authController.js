@@ -72,7 +72,6 @@ class UserController {
   }
 
   async resetPassword(req, res, next) {
-    console.log("req.body", req.body);
     try {
       const link = await userService.resetPasswordRequest(req.body.email);
       // return res.json({ message: "Please, check your email" });
@@ -84,11 +83,9 @@ class UserController {
     }
   }
 
-  async changePassword(req, res, next) {
+  async changePasswordController(req, res, next) {
     try {
-      console.log("req", req);
       const resetLink = req.params.link;
-      console.log("resetLink", resetLink);
       const newPassword = await userService.changePassword(
         req.body.password,
         resetLink

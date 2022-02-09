@@ -21,7 +21,7 @@ app.set("view engine", "ejs");
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.set("trust proxy", 1);
+app.enable("trust proxy");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -21,6 +21,7 @@ app.set("view engine", "ejs");
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.set("trust proxy", 1);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,8 +30,16 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({
-    credentials: true,
     origin: [process.env.API_URL, "http://localhost:3000"],
+    credentials: true,
+    allowedHeaders: [
+      "Content-Type",
+      "Accept",
+      "Origin",
+      "X-Requested-With",
+      "Authorization",
+      "Set-Cookie",
+    ],
   })
 );
 

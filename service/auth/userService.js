@@ -172,7 +172,11 @@ class UserService {
     if (!user) {
       throw ApiError.BadRequest("User not found!");
     }
-    user.password = await bcrypt.hash(password, 10);
+    console.log("password", password);
+    // const hashPassword = await bcrypt.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, 10);
+    console.log("hashPassword", hashPassword);
+    user.password = hashPassword;
     user.resetLink = null;
     await user.save();
   }

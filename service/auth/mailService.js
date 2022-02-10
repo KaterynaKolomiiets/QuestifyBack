@@ -1,4 +1,4 @@
-const confirmEmail = (link) => {
+const confirmEmail = (link, name) => {
   return `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml">
@@ -132,7 +132,7 @@ const confirmEmail = (link) => {
   </table><table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="06f4c419-2d27-48ee-91ee-9a4657671540" data-mc-module-version="2019-10-22">
     <tbody>
       <tr>
-        <td style="padding:18px 0px 18px 0px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content"><div><div style="font-family: inherit; text-align: center"><em><strong>Hi! Thanks for your registration!</strong></em></div>
+        <td style="padding:18px 0px 18px 0px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content"><div><div style="font-family: inherit; text-align: center"><em><strong>Hi, ${name}! Thanks for your registration!</strong></em></div>
 <div style="font-family: inherit; text-align: center"><span style="color: #000000; font-family: arial, helvetica, sans-serif; font-size: 14px; font-style: italic; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 700; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline">Just one last step is confirm your Email!)</span>&nbsp;</div><div></div></div></td>
       </tr>
     </tbody>
@@ -205,7 +205,7 @@ const confirmEmail = (link) => {
   </html>`;
 };
 
-const forgotPasswordEmail = (link) => {
+const forgotPasswordEmail = (link, name) => {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -357,7 +357,7 @@ const forgotPasswordEmail = (link) => {
   </table><table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="06f4c419-2d27-48ee-91ee-9a4657671540" data-mc-module-version="2019-10-22">
     <tbody>
       <tr>
-        <td style="padding:18px 0px 18px 0px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content"><div><div style="font-family: inherit; text-align: center"><em><strong>Hi! We received request to change your password!</strong></em></div>
+        <td style="padding:18px 0px 18px 0px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content"><div><div style="font-family: inherit; text-align: center"><em><strong>Hi, ${name}! We received request to change your password!</strong></em></div>
 <div style="font-family: inherit; text-align: center"><em><strong>If you didn't send that request, just ignore this message.</strong></em></div><div></div></div></td>
       </tr>
     </tbody>

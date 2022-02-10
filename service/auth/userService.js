@@ -14,7 +14,7 @@ const {
 } = require("./mailService");
 
 class UserService {
-  async registration(email, password, host) {
+  async registration(name, email, password, host) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
@@ -24,6 +24,7 @@ class UserService {
     const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
 
     const user = await UserModel.create({
+      name,
       email,
       password: hashPassword,
       activationLink,
@@ -31,7 +32,8 @@ class UserService {
     });
 
     const mail = confirmEmail(
-      `${process.env.API_URL}/api/users/activate/${activationLink}`
+      `${process.env.API_URL}/api/users/activate/${activationLink}`,
+      name
     );
 
     const msg = {
@@ -50,6 +52,7 @@ class UserService {
     const newUser = await UserModel.findOne({ email });
 
     return {
+      name: newUser.name,
       email: newUser.email,
       id: newUser.id,
       isActivated: user.isActivated,
@@ -152,7 +155,8 @@ class UserService {
     await user.save();
 
     const mail = forgotPasswordEmail(
-      `${process.env.API_URL}/api/users/change-password/${resetLink}`
+      `${process.env.API_URL}/api/users/change-password/${resetLink}`,
+      user.name
     );
 
     const msg = {

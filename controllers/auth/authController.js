@@ -4,11 +4,17 @@ const ApiError = require("../../service/auth/apiError");
 class UserController {
   async registration(req, res, next) {
     try {
-      const { email, password } = req.body;
+      const { name, email, password } = req.body;
 
       const host =
         req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-      const userData = await userService.registration(email, password, host);
+      console.log("host", host);
+      const userData = await userService.registration(
+        name,
+        email,
+        password,
+        host
+      );
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -24,6 +30,7 @@ class UserController {
       const { email, password } = req.body;
       const host =
         req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+      console.log("host", host);
       const userData = await userService.login(email, password, host);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -53,7 +60,7 @@ class UserController {
     try {
       const activationLink = req.params.link;
       await userService.activate(activationLink);
-      return res.redirect(process.env.API_URL);
+      return res.redirect(process.env.CLIENT_URL);
     } catch (e) {
       next(e);
     }

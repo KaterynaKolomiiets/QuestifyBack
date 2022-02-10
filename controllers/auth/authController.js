@@ -88,7 +88,7 @@ class UserController {
       const link = await userService.resetPasswordRequest(req.body.email);
       // return res.json({ message: "Please, check your email" });
       return res.redirect(
-        `${process.env.API_URL}/api/users/change-password/${link}`
+        `${process.env.CLIENT_URL}/api/users/change-password/${link}`
       );
     } catch (e) {
       next(e);

@@ -30,7 +30,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({
-    origin: [process.env.API_URL, "http://localhost:3000"],
+    origin: [
+      process.env.API_URL,
+      "http://localhost:3000",
+      process.env.CLIENT_URL,
+    ],
     credentials: true,
     allowedHeaders: [
       "Content-Type",
@@ -40,6 +44,7 @@ app.use(
       "Authorization",
       "Set-Cookie",
       "update",
+      "hrmt",
     ],
   })
 );

@@ -6,9 +6,9 @@ class UserController {
     try {
       const { name, email, password } = req.body;
 
-      const host =
-        req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-      console.log("host", host);
+      const ip = req.headers.hrmt;
+      const host = Buffer.from(ip, "base64").toString();
+
       const userData = await userService.registration(
         name,
         email,
@@ -28,8 +28,10 @@ class UserController {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      const host =
-        req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+
+      const ip = req.headers.hrmt;
+      const host = Buffer.from(ip, "base64").toString();
+
       console.log("host", host);
       const userData = await userService.login(email, password, host);
       res.cookie("refreshToken", userData.refreshToken, {
@@ -87,9 +89,7 @@ class UserController {
     try {
       const link = await userService.resetPasswordRequest(req.body.email);
       // return res.json({ message: "Please, check your email" });
-      return res.redirect(
-        `${process.env.CLIENT_URL}/api/users/change-password/${link}`
-      );
+      return res.redirect(`/`);
     } catch (e) {
       next(e);
     }
@@ -112,7 +112,10 @@ class UserController {
     try {
       const result = await userService.confirmNewHost(req.params.link);
       if (result) {
-        return res.redirect(process.env.API_URL);
+        console.log("result", result);
+        return res.redirect(
+          `${process.env.CLIENT_URL}/api/users/change-password/${result}`
+        );
       }
       res.json({ message: "IP adress mark as safe!" });
     } catch (e) {

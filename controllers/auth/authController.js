@@ -117,7 +117,8 @@ class UserController {
           `${process.env.CLIENT_URL}/api/users/change-password/${result}`
         );
       }
-      res.json({ message: "IP adress mark as safe!" });
+      return res.redirect(`${process.env.CLIENT_URL}/auth`);
+      // res.json({ message: "IP adress mark as safe!" });
     } catch (e) {
       next(e);
     }

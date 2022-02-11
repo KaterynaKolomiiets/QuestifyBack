@@ -22,6 +22,7 @@ class UserService {
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
+    console.log("host", host);
 
     const user = await UserModel.create({
       name,
@@ -148,14 +149,14 @@ class UserService {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const user = await UserModel.findOne({ email });
     if (!user) {
-      throw ApiError.BadRequest("User not found!");
+      throw ApiError.BadRequest(`User with email: ${email} not found!`);
     }
     const resetLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
     user.resetLink = resetLink;
     await user.save();
 
     const mail = forgotPasswordEmail(
-      `${process.env.API_URL}/api/users/change-password/${resetLink}`,
+      `${process.env.CLIENT_URL}/api/users/change-password/${resetLink}`,
       user.name
     );
 
@@ -163,7 +164,7 @@ class UserService {
       to: email,
       from: "maintenance.questify@gmail.com",
       subject: "Reset Password!",
-      text: `Here is Your verification link - ${process.env.API_URL}/api/users/change-password/${resetLink}`,
+      text: `Here is Your verification link - ${process.env.CLIENT_URL}/api/users/change-password/${resetLink}`,
       html: mail,
     };
 
@@ -176,10 +177,9 @@ class UserService {
     if (!user) {
       throw ApiError.BadRequest("User not found!");
     }
-    console.log("password", password);
-    // const hashPassword = await bcrypt.hash(password, 10);
+
     const hashPassword = await bcrypt.hash(password, 10);
-    console.log("hashPassword", hashPassword);
+
     user.password = hashPassword;
     user.resetLink = null;
     await user.save();
@@ -189,15 +189,21 @@ class UserService {
     const confirmation = jwt.decode(link, process.env.AGREE_SECRET);
     const email = confirmation.split("-")[0];
     const answer = confirmation.split("-")[1];
+    console.log("email", email);
 
     const user = await UserModel.findOne({ email });
+    console.log("user", user);
 
     if (answer === "decline") {
+      console.log("user.id", user.id);
       const tokenFromDB = await TokenModel.findOne({ user: user.id });
-      await this.logout(tokenFromDB.refreshToken);
+      console.log("fitokenFromDBrst", tokenFromDB);
+      tokenFromDB ? await this.logout(tokenFromDB.refreshToken) : false;
       user.tmpHost = null;
+      const resetLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
+      user.resetLink = resetLink;
       await user.save();
-      return user;
+      return resetLink;
     }
     user.host.push(user.tmpHost);
     user.tmpHost = null;

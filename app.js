@@ -33,6 +33,7 @@ app.use(
     origin: [
       process.env.API_URL,
       "http://localhost:3000",
+      "https://questify-bdgrt.netlify.app/auth",
       process.env.CLIENT_URL,
     ],
     credentials: true,

@@ -33,7 +33,7 @@ class UserService {
     });
 
     const mail = confirmEmail(
-      `${process.env.API_URL}/api/users/activate/${activationLink}`,
+      `${process.env.API_URL}api/users/activate/${activationLink}`,
       name
     );
 
